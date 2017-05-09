@@ -1,9 +1,8 @@
-import {
+import counterReducer, {
   COUNTER_INCREMENT,
   increment,
   doubleAsync,
-  default as counterReducer,
-} from 'routes/Counter/modules/counter';
+} from '../../../../src/routes/Counter/modules/counter';
 
 describe('(Redux Module) Counter', () => {
   it('Should export a constant COUNTER_INCREMENT.', () => {
@@ -50,21 +49,21 @@ describe('(Redux Module) Counter', () => {
   });
 
   describe('(Action Creator) doubleAsync', () => {
-    let _globalState;
-    let _dispatchSpy;
-    let _getStateSpy;
+    let globalState;
+    let dispatchSpy;
+    let getStateSpy;
 
     beforeEach(() => {
-      _globalState = {
+      globalState = {
         counter : counterReducer(undefined, {}),
       };
-      _dispatchSpy = sinon.spy((action) => {
-        _globalState = {
-          ..._globalState,
-          counter : counterReducer(_globalState.counter, action),
+      dispatchSpy = sinon.spy((action) => {
+        globalState = {
+          ...globalState,
+          counter : counterReducer(globalState.counter, action),
         };
       });
-      _getStateSpy = sinon.spy(() => _globalState);
+      getStateSpy = sinon.spy(() => globalState);
     });
 
     it('Should be exported as a function.', () => {
@@ -75,28 +74,30 @@ describe('(Redux Module) Counter', () => {
       expect(doubleAsync()).to.be.a('function');
     });
 
-    it('Should return a promise from that thunk that gets fulfilled.', () => doubleAsync()(_dispatchSpy, _getStateSpy).should.eventually.be.fulfilled);
+    it('Should return a promise from that thunk that gets fulfilled.', () =>
+      doubleAsync()(dispatchSpy, getStateSpy).should.eventually.be.fulfilled(),
+    );
 
-    it('Should call dispatch and getState exactly once.', () => doubleAsync()(_dispatchSpy, _getStateSpy)
+    it('Should call dispatch and getState exactly once.', () => doubleAsync()(dispatchSpy, getStateSpy)
         .then(() => {
-          _dispatchSpy.should.have.been.calledOnce;
-          _getStateSpy.should.have.been.calledOnce;
+          dispatchSpy.should.have.been.calledOnce();
+          getStateSpy.should.have.been.calledOnce();
         }));
 
     it('Should produce a state that is double the previous state.', () => {
-      _globalState = { counter: 2 };
+      globalState = { counter: 2 };
 
-      return doubleAsync()(_dispatchSpy, _getStateSpy)
+      return doubleAsync()(dispatchSpy, getStateSpy)
         .then(() => {
-          _dispatchSpy.should.have.been.calledOnce;
-          _getStateSpy.should.have.been.calledOnce;
-          expect(_globalState.counter).to.equal(4);
-          return doubleAsync()(_dispatchSpy, _getStateSpy);
+          dispatchSpy.should.have.been.calledOnce();
+          getStateSpy.should.have.been.calledOnce();
+          expect(globalState.counter).to.equal(4);
+          return doubleAsync()(dispatchSpy, getStateSpy);
         })
         .then(() => {
-          _dispatchSpy.should.have.been.calledTwice;
-          _getStateSpy.should.have.been.calledTwice;
-          expect(_globalState.counter).to.equal(8);
+          dispatchSpy.should.have.been.calledTwice();
+          getStateSpy.should.have.been.calledTwice();
+          expect(globalState.counter).to.equal(8);
         });
     });
   });

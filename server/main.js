@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const express = require('express');
 const debug = require('debug')('app:server');
 const path = require('path');

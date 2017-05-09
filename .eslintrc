@@ -24,5 +24,12 @@
     "jsx-quotes"           : [2, "prefer-single"],
     "max-len"              : [2, 120, 2],
     "object-curly-spacing" : [2, "always"]
+  },
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": "config/webpack.config.js"
+      }
+    }
   }
 }

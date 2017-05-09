@@ -6,9 +6,9 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const project = require('./project.config');
 const debug = require('debug')('app:config:webpack');
 
-const __DEV__ = project.globals.__DEV__;
-const __PROD__ = project.globals.__PROD__;
-const __TEST__ = project.globals.__TEST__;
+const __DEV__ = project.globals.__DEV__; // eslint-disable-line no-underscore-dangle
+const __PROD__ = project.globals.__PROD__; // eslint-disable-line no-underscore-dangle
+const __TEST__ = project.globals.__TEST__; // eslint-disable-line no-underscore-dangle
 
 debug('Creating configuration.');
 const webpackConfig = {
@@ -70,7 +70,7 @@ webpackConfig.plugins = [
 // Ensure that the compiler exits on errors during testing so that
 // they do not get skipped and misreported.
 if (__TEST__ && !argv.watch) {
-  webpackConfig.plugins.push(function () {
+  webpackConfig.plugins.push(() => {
     this.plugin('done', (stats) => {
       if (stats.compilation.errors.length) {
         // Pretend no assets were generated. This prevents the tests
@@ -203,8 +203,8 @@ if (!__DEV__) {
   ).forEach((loader) => {
     const first = loader.loaders[0];
     const rest = loader.loaders.slice(1);
-    loader.loader = ExtractTextPlugin.extract(first, rest.join('!'));
-    delete loader.loaders;
+    loader.loader = ExtractTextPlugin.extract(first, rest.join('!')); // eslint-disable-line no-param-reassign
+    delete loader.loaders; // eslint-disable-line no-param-reassign
   });
 
   webpackConfig.plugins.push(

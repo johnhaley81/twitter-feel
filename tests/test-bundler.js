@@ -21,10 +21,10 @@ global.should = chai.should();
 // ---------------------------------------
 // for use with karma-webpack-with-fast-source-maps
 const __karmaWebpackManifest__ = []; // eslint-disable-line
-const inManifest = path => ~__karmaWebpackManifest__.indexOf(path);
+const inManifest = path => __karmaWebpackManifest__.contains(path);
 
 // require all `tests/**/*.spec.js`
-const testsContext = require.context('./', true, /\.spec\.js$/);
+const testsContext = require.context('./', true, /\.spec\.jsx?$/);
 
 // only run tests that have changed after the first pass.
 const testsToRun = testsContext.keys().filter(inManifest)
@@ -32,6 +32,6 @@ const testsToRun = testsContext.keys().filter(inManifest)
 
 // require all `src/**/*.js` except for `main.js` (for isparta coverage reporting)
 if (__COVERAGE__) {
-  const componentsContext = require.context('../src/', true, /^((?!main|reducers).)*\.js$/);
+  const componentsContext = require.context('../src/', true, /^((?!main|reducers).)*\.jsx?$/);
   componentsContext.keys().forEach(componentsContext);
 }

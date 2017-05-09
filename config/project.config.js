@@ -93,21 +93,24 @@ const pkg = require('../package.json');
 
 config.compiler_vendors = config.compiler_vendors
   .filter((dep) => {
-    if (pkg.dependencies[dep]) return true;
+    if (pkg.dependencies[dep]) {
+      return true;
+    }
 
     debug(
       `Package "${dep}" was not found as an npm dependency in package.json; ` +
       `it won't be included in the webpack vendor bundle.
        Consider removing it from \`compiler_vendors\` in ~/config/index.js`,
     );
+
+    return false;
   });
 
 // ------------------------------------
 // Utilities
 // ------------------------------------
-function base() {
-  const args = [config.path_base].concat([].slice.call(arguments));
-  return path.resolve(...args);
+function base(...args) {
+  return path.resolve([config.path_base, ...args]);
 }
 
 config.paths = {
@@ -122,6 +125,7 @@ config.paths = {
 // ========================================================
 debug(`Looking for environment overrides for NODE_ENV "${config.env}".`);
 const environments = require('./environments.config');
+
 const overrides = environments[config.env];
 if (overrides) {
   debug('Found overrides, applying to default configuration.');

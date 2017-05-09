@@ -1,6 +1,4 @@
-import {
-  default as createStore,
-} from 'store/createStore';
+import createStore from '../../src/store/createStore';
 
 describe('(Store) createStore', () => {
   let store;
@@ -11,7 +9,7 @@ describe('(Store) createStore', () => {
 
   it('should have an empty asyncReducers object', () => {
     expect(store.asyncReducers).to.be.an('object');
-    expect(store.asyncReducers).to.be.empty;
+    expect(store.asyncReducers).to.be.empty();
   });
 
   describe('(Location)', () => {
