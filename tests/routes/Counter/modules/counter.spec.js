@@ -75,7 +75,7 @@ describe('(Redux Module) Counter', () => {
     });
 
     it('Should return a promise from that thunk that gets fulfilled.', () =>
-      doubleAsync()(dispatchSpy, getStateSpy).should.eventually.be.fulfilled(),
+      doubleAsync()(dispatchSpy, getStateSpy).should.eventually.be.fulfilled()
     );
 
     it('Should call dispatch and getState exactly once.', () => doubleAsync()(dispatchSpy, getStateSpy)

@@ -20,10 +20,20 @@
     "__COVERAGE__" : false
   },
   "rules": {
-    "key-spacing"          : 0,
-    "jsx-quotes"           : [2, "prefer-single"],
-    "max-len"              : [2, 120, 2],
-    "object-curly-spacing" : [2, "always"]
+    "comma-dangle"          : [
+                              error,
+                              {
+                                "arrays": "only-multiline",
+                                "objects": "only-multiline",
+                                "imports": "only-multiline",
+                                "exports": "only-multiline",
+                                "functions": "never",
+                              }
+                            ],
+    "key-spacing"           : 0,
+    "jsx-quotes"            : [2, "prefer-single"],
+    "max-len"               : [2, 120, 2],
+    "object-curly-spacing"  : [2, "always"]
   },
   "settings": {
     "import/resolver": {

@@ -19,7 +19,7 @@ let render = () => {
 
   ReactDOM.render(
     <AppContainer store={store} routes={routes} />, // eslint-disable-line react/jsx-filename-extension
-    MOUNT_NODE,
+    MOUNT_NODE
   );
 };
 
@@ -49,7 +49,7 @@ if (__DEV__) {
       setImmediate(() => {
         ReactDOM.unmountComponentAtNode(MOUNT_NODE);
         render();
-      }),
+      })
     );
   }
 }

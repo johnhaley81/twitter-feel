@@ -100,7 +100,7 @@ config.compiler_vendors = config.compiler_vendors
     debug(
       `Package "${dep}" was not found as an npm dependency in package.json; ` +
       `it won't be included in the webpack vendor bundle.
-       Consider removing it from \`compiler_vendors\` in ~/config/index.js`,
+       Consider removing it from \`compiler_vendors\` in ~/config/index.js`
     );
 
     return false;
@@ -110,7 +110,7 @@ config.compiler_vendors = config.compiler_vendors
 // Utilities
 // ------------------------------------
 function base(...args) {
-  return path.resolve([config.path_base, ...args]);
+  return path.resolve(config.path_base, ...args);
 }
 
 config.paths = {

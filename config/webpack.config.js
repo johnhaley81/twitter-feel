@@ -70,14 +70,12 @@ webpackConfig.plugins = [
 // Ensure that the compiler exits on errors during testing so that
 // they do not get skipped and misreported.
 if (__TEST__ && !argv.watch) {
-  webpackConfig.plugins.push(() => {
+  webpackConfig.plugins.push(function () { // eslint-disable-line func-names
     this.plugin('done', (stats) => {
       if (stats.compilation.errors.length) {
         // Pretend no assets were generated. This prevents the tests
         // from running making it clear that there were warnings.
-        throw new Error(
-          stats.compilation.errors.map(err => err.message || err),
-        );
+        throw new Error(stats.compilation.errors.map(err => err.message || err));
       }
     });
   });
@@ -85,10 +83,7 @@ if (__TEST__ && !argv.watch) {
 
 if (__DEV__) {
   debug('Enabling plugins for live development (HMR, NoErrors).');
-  webpackConfig.plugins.push(
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
-  );
+  webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin(), new webpack.NoErrorsPlugin());
 } else if (__PROD__) {
   debug('Enabling plugins for production (OccurrenceOrder, Dedupe & UglifyJS).');
   webpackConfig.plugins.push(
@@ -101,7 +96,7 @@ if (__DEV__) {
         warnings  : false,
       },
     }),
-    new webpack.optimize.AggressiveMergingPlugin(),
+    new webpack.optimize.AggressiveMergingPlugin()
   );
 }
 
@@ -110,7 +105,7 @@ if (!__TEST__) {
   webpackConfig.plugins.push(
     new webpack.optimize.CommonsChunkPlugin({
       names : ['vendor'],
-    }),
+    })
   );
 }
 
@@ -199,7 +194,7 @@ webpackConfig.module.loaders.push(
 if (!__DEV__) {
   debug('Applying ExtractTextPlugin to CSS loaders.');
   webpackConfig.module.loaders.filter(loader =>
-    loader.loaders && loader.loaders.find(name => /css/.test(name.split('?')[0])),
+    loader.loaders && loader.loaders.find(name => /css/.test(name.split('?')[0]))
   ).forEach((loader) => {
     const first = loader.loaders[0];
     const rest = loader.loaders.slice(1);
@@ -210,7 +205,7 @@ if (!__DEV__) {
   webpackConfig.plugins.push(
     new ExtractTextPlugin('[name].[contenthash].css', {
       allChunks : true,
-    }),
+    })
   );
 }
 
