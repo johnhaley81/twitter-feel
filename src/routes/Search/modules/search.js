@@ -1,13 +1,5 @@
 import R from 'ramda';
-import Twit from 'twit';
-
-const T = new Twit({
-  consumer_key:         '...',
-  consumer_secret:      '...',
-  access_token:         '...',
-  access_token_secret:  '...',
-  timeout_ms:           10 * 1000,
-});
+import XHR from 'xhr-promise';
 
 // ------------------------------------
 // Constants
@@ -24,13 +16,26 @@ export const updateSearch = query => (dispatch) => {
     query
   });
 
-  T.get('search/tweets', { q: query, count: 10 })
-    .then(({ data: results }) => {
-      dispatch({
-        type: UPDATE_RESULTS,
-        results
-      });
+
+  const xhrPromise = new XHR();
+
+  xhrPromise.send({
+    method: 'GET',
+    url: `/twitter?q=${query}`,
+  })
+  .then((results) => {
+    if (results.status !== 200) {
+      throw new Error('request failed');
+    }
+    dispatch({
+      type: UPDATE_RESULTS,
+      results
     });
+  })
+  .catch((e) => {
+    console.error('XHR error'); // eslint-disable-line no-console
+    console.error(e); // eslint-disable-line no-console
+  });
 };
 
 export const actions = {
