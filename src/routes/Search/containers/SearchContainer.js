@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { increment, doubleAsync } from '../modules/search';
+import { fetchSearchResults, updateSearchQuery } from '../modules/search';
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -13,12 +13,13 @@ import { Search } from '../components/Search';
     implementing our wrapper around increment; the component doesn't care   */
 
 const mapDispatchToProps = {
-  increment : () => increment(1),
-  doubleAsync,
+  fetchSearchResults,
+  updateSearchQuery,
 };
 
-const mapStateToProps = state => ({
-  counter : state.counter,
+const mapStateToProps = ({ search }) => ({
+  query : search.query,
+  results: search.results,
 });
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:
