@@ -14,10 +14,14 @@
     "browser" : true
   },
   "globals": {
-    "__DEV__"      : false,
-    "__TEST__"     : false,
-    "__PROD__"     : false,
-    "__COVERAGE__" : false
+    "__DEV__"                         : false,
+    "__TEST__"                        : false,
+    "__PROD__"                        : false,
+    "__COVERAGE__"                    : false,
+    "__TWITTER_CONSUMER_KEY__"        : false,
+    "__TWITTER_CONSUMER_SECRET__"     : false,
+    "__TWITTER_ACCESS_TOKEN__"        : false,
+    "__TWITTER_ACCESS_TOKEN_SECRET__" : false
   },
   "rules": {
     "comma-dangle"          : [

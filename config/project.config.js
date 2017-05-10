@@ -4,6 +4,25 @@ const debug = require('debug')('app:config:project');
 const argv = require('yargs').argv;
 const ip = require('ip');
 
+let authKeys;
+
+try {
+  authKeys = require('./authKeys'); // eslint-disable-line global-require
+} catch (e) {
+  debug(`
+Expected config/authKeys.js to exist. Please create it with the following content:
+
+module.exports = {
+  twitter: {
+    consumerKey:         '...',
+    consumerSecret:      '...',
+    accessToken:         '...',
+    accessTokenSecret:  '...'
+  }
+};
+`);
+}
+
 debug('Creating default configuration.');
 // ========================================================
 // Default Configuration
@@ -84,6 +103,10 @@ config.globals = {
   __TEST__     : config.env === 'test',
   __COVERAGE__ : !argv.watch && config.env === 'test',
   __BASENAME__ : JSON.stringify(process.env.BASENAME || ''),
+  __TWITTER_CONSUMER_KEY__: authKeys.twitter.consumerKey,
+  __TWITTER_CONSUMER_SECRET__: authKeys.twitter.consumerSecret,
+  __TWITTER_ACCESS_TOKEN__: authKeys.twitter.accessToken,
+  __TWITTER_ACCESS_TOKEN_SECRET__: authKeys.twitter.accessTokenSecret,
 };
 
 // ------------------------------------
