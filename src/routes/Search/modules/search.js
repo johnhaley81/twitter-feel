@@ -16,7 +16,6 @@ export const updateSearchQuery = event => dispatch => dispatch({
   query: valueLens(event)
 });
 
-const resultsLens = R.view(R.lensPath(['responseText', 'statuses']));
 export const fetchSearchResults = () => (dispatch, getState) => {
   const query = getState().search.query;
   const xhrPromise = new XHR();
@@ -25,13 +24,14 @@ export const fetchSearchResults = () => (dispatch, getState) => {
     method: 'GET',
     url: `/twitter?q=${query}`,
   })
-  .then((resp) => {
-    if (resp.status !== 200) {
+  .then(({ responseText: results, status }) => {
+    if (status !== 200) {
       throw new Error('request failed');
     }
+
     dispatch({
       type: UPDATE_RESULTS,
-      results: resultsLens(resp)
+      results,
     });
   })
   .catch((e) => {

@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 import R from 'ramda';
 import TweetEmbed from 'react-tweet-embed';
 
-const getEmbeddedTweets = R.map(({ id_str: id }) => <TweetEmbed id={id} key={id} />);
+const getEmbeddedTweets = R.map(
+  R.pipe(
+    R.view(R.lensPath(['tweet', 'id_str'])),
+    id => <TweetEmbed id={id} key={id} />
+  )
+);
 
 export const Search = ({ fetchSearchResults, query, results, updateSearchQuery }) => (
   <div style={{ margin: '0 auto' }} >
@@ -22,7 +27,9 @@ Search.propTypes = {
   fetchSearchResults: PropTypes.func.isRequired,
   query: PropTypes.string.isRequired,
   results: PropTypes.arrayOf(PropTypes.shape({
-    id_str: PropTypes.string.isRequired
+    tweet: PropTypes.shape({
+      id_str: PropTypes.string.isRequired
+    })
   })).isRequired,
   updateSearchQuery: PropTypes.func.isRequired,
 };

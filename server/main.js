@@ -8,6 +8,8 @@ const compress = require('compression');
 const Twit = require('twit');
 const webpackConfig = require('../config/webpack.config');
 const project = require('../config/project.config');
+const ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
+const R = require('ramda');
 
 const debug = debugConstructor('app:server');
 
@@ -19,6 +21,29 @@ const T = new Twit({
   timeout_ms: 10 * 1000,
 });
 
+const toneAnalyzer = new ToneAnalyzerV3({
+  username: project.globals.__WATSON_USERNAME__,
+  password: project.globals.__WATSON_PASSWORD__,
+  version_date: '2016-05-19'
+});
+
+const getToneForTweet = tweet => new Promise((resolve, reject) => {
+  toneAnalyzer.tone(tweet, (err, tone) => {
+    if (err) {
+      reject(err);
+    } else {
+      resolve({ tweet, tone });
+    }
+  });
+});
+
+const resultsLens = R.view(R.lensPath(['data', 'statuses']));
+
+const getTonesForResponse = R.pipe(
+  resultsLens,
+  R.map(getToneForTweet),
+  Promise.all.bind(Promise)
+);
 
 const app = express();
 
@@ -54,7 +79,8 @@ if (project.env === 'development') {
   app.use('/twitter', (req, res, next) => {
     const q = req.query.q;
     T.get('search/tweets', { q, count: 10 })
-      .then(({ data: results }) => {
+      .then(getTonesForResponse)
+      .then((results) => {
         res.set('content-type', 'application/json');
         res.send(results);
         res.end();

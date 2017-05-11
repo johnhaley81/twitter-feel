@@ -18,6 +18,10 @@ module.exports = {
     consumerSecret:      '...',
     accessToken:         '...',
     accessTokenSecret:  '...'
+  },
+  watson: {
+    username: '...',
+    password: '...'
   }
 };
 `);
@@ -107,6 +111,8 @@ config.globals = {
   __TWITTER_CONSUMER_SECRET__: authKeys.twitter.consumerSecret,
   __TWITTER_ACCESS_TOKEN__: authKeys.twitter.accessToken,
   __TWITTER_ACCESS_TOKEN_SECRET__: authKeys.twitter.accessTokenSecret,
+  __WATSON_USERNAME__: authKeys.watson.username,
+  __WATSON_PASSWORD__: authKeys.watson.password,
 };
 
 // ------------------------------------
